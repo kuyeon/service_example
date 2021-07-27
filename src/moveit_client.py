@@ -4,17 +4,25 @@ import rospy
 from service_example.srv import *
 
 
-def move_it_client(cmd_type, dist, vel):
-    rospy.wait_for_service("move_it")
-    try:
-        move_it = rospy.ServiceProxy("move_it", MoveIt)
-        resp1 = move_it(cmd_type, dist, vel)
-        return resp1.response_message
-    except rospy.ServiceException as e:
-        print("Serive call failed: %s" % e)
+class MoveItClient:
+    def __init__(self):
+        pass
+
+
+    def move_it_client(self, cmd_type, dist, vel):
+        rospy.wait_for_service("move_it")
+        try:
+            move_it = rospy.ServiceProxy("move_it", MoveIt)
+            resp1 = move_it(cmd_type, dist, vel)
+            return resp1.response_message
+        except rospy.ServiceException as e:
+            print("Serive call failed: %s" % e)
 
 
 if __name__ == "__main__":
+    c1 = MoveItClient()
+
+
     if len(sys.argv) == 4:
         c = sys.argv[1]
         d = sys.argv[2]
@@ -25,4 +33,4 @@ if __name__ == "__main__":
 
     print("\nRequesting the railrobot to %s %s at a speed of %s\n" % (c, d, v))
     print("Moving...\n")
-    print(move_it_client(c, d, v))
+    print(c1.move_it_client(c, d, v))
